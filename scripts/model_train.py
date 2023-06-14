@@ -28,14 +28,14 @@ def model_train(train_data, target_data):
 if __name__ == "__main__":
     print("Model training started")
     df_train = (
-        pd.read_csv("../data/dataset_train_preprocessed.csv").dropna().drop_duplicates()
+        pd.read_csv("./data/dataset_train_preprocessed.csv").dropna().drop_duplicates()
     )
     df_test = (
-        pd.read_csv("../data/dataset_test_preprocessed.csv").dropna().drop_duplicates()
+        pd.read_csv("./data/dataset_test_preprocessed.csv").dropna().drop_duplicates()
     )
     tfidf = tfidf_fitter(df_train, df_test)
-    pickle.dump(tfidf, open("../models/tfidf.pkl", "wb"))
+    pickle.dump(tfidf, open("./models/tfidf.pkl", "wb"))
     train_data = tfidf.transform(df_train["Processed"])
     model = model_train(train_data, df_train["sentiment"])
-    df_test.to_csv("../data/dataset_test_preprocessed.csv", index=False)
-    pickle.dump(model, open("../models/model.pkl", "wb"))
+    df_test.to_csv("./data/dataset_test_preprocessed.csv", index=False)
+    pickle.dump(model, open("./models/model.pkl", "wb"))

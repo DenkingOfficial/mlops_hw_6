@@ -83,7 +83,7 @@ def join_tokens(tokens):
 
 if __name__ == "__main__":
     print("Data preprocessing started")
-    df = pd.read_csv("../data/dataset.csv", sep="\t")
+    df = pd.read_csv("./data/dataset.csv", sep="\t")
     print("Cleaning data")
     df["review"] = df["review"].progress_apply(clean_comment)
     print("Tokenization and lemmatization")
@@ -95,6 +95,6 @@ if __name__ == "__main__":
     df = df[df["sentiment"] != "neautral"]
     df_train, df_test = train_test_split(df, test_size=0.3, random_state=978)
     print("Saving data")
-    df_train.to_csv("../data/dataset_train_preprocessed.csv", index=False)
-    df_test.to_csv("../data/dataset_test_preprocessed.csv", index=False)
+    df_train.to_csv("./data/dataset_train_preprocessed.csv", index=False)
+    df_test.to_csv("./data/dataset_test_preprocessed.csv", index=False)
     print("Data preprocessing finished")
