@@ -1,0 +1,5 @@
+pandas
+nltk
+pymorphy2
+scikit-learn
+tqdm
