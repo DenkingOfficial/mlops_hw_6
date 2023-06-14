@@ -58,7 +58,7 @@ def clean_comment(comment):
     temp_comment = re.sub(punctuation_pattern, r"", temp_comment)
     temp_comment = re.sub(joined_pattern, r"\1 \2", temp_comment)
     temp_comment = re.sub(digits_pattern, "#", temp_comment)
-    temp_comment = temp_comment.removesuffix(" ")
+    temp_comment = remove_suffix(temp_comment, " ")
     temp_comment = temp_comment.replace("\xad", "")
     temp_comment = temp_comment.replace("\r", ". ")
     temp_comment = temp_comment.replace("\n", ". ")
@@ -79,6 +79,12 @@ def lemmatization(text):
 
 def join_tokens(tokens):
     return " ".join(tokens)
+
+
+def remove_suffix(input_string, suffix):
+    if suffix and input_string.endswith(suffix):
+        return input_string[: -len(suffix)]
+    return input_string
 
 
 if __name__ == "__main__":
