@@ -5,3 +5,5 @@ scikit-learn
 tqdm
 gdown
 gradio
+pytest
+pyarrow

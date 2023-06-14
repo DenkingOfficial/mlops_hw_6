@@ -92,15 +92,21 @@ if __name__ == "__main__":
     df = pd.read_csv("./data/dataset.csv", sep="\t")
     print("Cleaning data")
     df["review"] = df["review"].progress_apply(clean_comment)
+    df.dropna(inplace=True)
+    df.drop_duplicates(inplace=True)
+    df = df[df["sentiment"] != "neautral"]
+    df = df[
+        df.apply(
+            lambda row: not any((x == "" or x == [] or x == " ") for x in row), axis=1
+        )
+    ]
     print("Tokenization and lemmatization")
     df["Tokens"] = df["review"].progress_apply(tokenize).progress_apply(lemmatization)
     print("Joining tokens")
     df["Processed"] = df["Tokens"].progress_apply(join_tokens)
     print("Final touches")
-    df.dropna(inplace=True)
-    df = df[df["sentiment"] != "neautral"]
     df_train, df_test = train_test_split(df, test_size=0.3, random_state=978)
     print("Saving data")
-    df_train.to_csv("./data/dataset_train_preprocessed.csv", index=False)
-    df_test.to_csv("./data/dataset_test_preprocessed.csv", index=False)
+    df_train.to_parquet("./data/dataset_train_preprocessed.parquet")
+    df_test.to_parquet("./data/dataset_test_preprocessed.parquet")
     print("Data preprocessing finished")
