@@ -9,4 +9,4 @@ if __name__ == "__main__":
     test_data = tfidf.transform(df_test["Processed"])
     model = pickle.load(open("./models/model.pkl", "rb"))
     predicted = model.predict(test_data)
-    print("Accuracy on test set:" + accuracy_score(df_test["sentiment"], predicted))
+    print("Accuracy on test set:" + accuracy_score(df_test["sentiment"]))
