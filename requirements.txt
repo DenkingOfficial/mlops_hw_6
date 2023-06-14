@@ -7,3 +7,4 @@ gdown
 gradio
 pytest
 pyarrow
+gradio_client
