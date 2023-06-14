@@ -4,3 +4,4 @@ pymorphy2
 scikit-learn
 tqdm
 gdown
+gradio
