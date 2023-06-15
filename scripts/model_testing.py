@@ -4,7 +4,7 @@ import pickle
 
 if __name__ == "__main__":
     print("Model testing started")
-    df_test = pd.read_csv("./data/dataset_test_preprocessed.csv")
+    df_test = pd.read_parquet("./data/dataset_test_preprocessed.parquet")
     tfidf = pickle.load(open("./models/tfidf.pkl", "rb"))
     test_data = tfidf.transform(df_test["Processed"])
     model = pickle.load(open("./models/model.pkl", "rb"))
