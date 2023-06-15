@@ -54,10 +54,5 @@ pipeline {
                 sh 'sudo docker build -t hw6:1.0 .'
             }
         }
-        stage('Docker run') {
-            steps {
-                sh 'sudo docker run -p 7860:7860 hw6:1.0'
-            }
-        }
     }
 }
