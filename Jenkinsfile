@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git branch: 'Tests', url: 'https://github.com/DenkingOfficial/mlops_hw_6.git'
+                git branch: 'data_v1', url: 'https://github.com/DenkingOfficial/mlops_hw_6.git'
             }
         }
         stage('Install requirements') {
@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Downloading data') {
             steps { 
-                sh 'python ./scripts/download_data.py'
+                sh 'dvc pull'
             }
         }
         stage('Data preparation') {
