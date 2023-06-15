@@ -8,3 +8,5 @@ gradio
 pytest
 pyarrow
 gradio_client
+dvc
+dvc_gdrive
