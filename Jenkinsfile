@@ -49,5 +49,15 @@ pipeline {
                 sh 'pkill -f app.py'
             }
         }
+        stage('Docker build') {
+            steps {
+                sh 'docker build -t hw6:1.0 .'
+            }
+        }
+        stage('Docker run') {
+            steps {
+                sh 'docker run -p 7860:7860 hw6:1.0'
+            }
+        }
     }
 }
