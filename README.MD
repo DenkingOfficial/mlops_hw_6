@@ -20,7 +20,6 @@ Team #2
 * Под тегом dataset_v2 - датасет [Russian-language reviews](https://www.kaggle.com/datasets/laytsw/reviews)
 * Под тегом dataset_merged - два объединенных датасета
 Во время работы пайплайна в Jenkins первым шагом он ожидает пока пользователь выберет версию датасета, которую дальше использовать:
-![Dataset selection]
 
 ![Dataset selection](https://raw.github.com/DenkingOfficial/mlops_hw_6/main/static/dataset-selection-screenshot.jpg)
 
