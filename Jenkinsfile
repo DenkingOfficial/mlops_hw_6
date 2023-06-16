@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git branch: 'Docker', url: 'https://github.com/DenkingOfficial/mlops_hw_6.git'
+                git branch: 'main', url: 'https://github.com/DenkingOfficial/mlops_hw_6.git'
             }
         }
         stage('Install requirements') {
