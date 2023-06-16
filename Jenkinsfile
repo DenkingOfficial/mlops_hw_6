@@ -15,7 +15,7 @@ pipeline {
             steps {
                 checkout([
                     $class: 'GitSCM',
-                    branches: [[name: ${selectedVersion}]],
+                    branches: [[name: selectedVersion]],
                     userRemoteConfigs: [[url: 'https://github.com/DenkingOfficial/mlops_hw_6.git']]
                 ])
             }
