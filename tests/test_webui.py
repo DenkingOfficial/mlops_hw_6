@@ -1,6 +1,15 @@
 from gradio_client import Client
+import socket
 
-client = Client("http://127.0.0.1:7860/")
+
+def get_local_ip_address():
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+    return local_ip
+
+
+ip = f"http://{get_local_ip_address()}:7860"
+client = Client(ip)
 
 
 def test_positive():
