@@ -1,9 +1,28 @@
 pipeline {
     agent any
+    
+    environment {
+        DOCKERHUB_USERNAME = credentials('dockerhub-credentials')
+    }
+    
     stages {
+        stage('Select Version') {
+            steps {
+                script {
+                    def versionChoices = ['*/main', 'refs/tags/dataset_v2', 'refs/tags/dataset_merged']
+                    selectedVersion = input message: 'Choose a dataset version:',
+                                       parameters: [choice(name: 'version', choices: versionChoices.join('\n'), description: 'Select a version from the list')]
+                    echo "Selected dataset version: ${selectedVersion}"
+                }
+            }
+        }
         stage('Clone Repo') {
             steps {
-                git branch: 'Tests', url: 'https://github.com/DenkingOfficial/mlops_hw_6.git'
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: selectedVersion]],
+                    userRemoteConfigs: [[url: 'https://github.com/DenkingOfficial/mlops_hw_6.git']]
+                ])
             }
         }
         stage('Install requirements') {
@@ -13,7 +32,7 @@ pipeline {
         }
         stage('Downloading data') {
             steps { 
-                sh 'python ./scripts/download_data.py'
+                sh 'dvc pull'
             }
         }
         stage('Data preparation') {
@@ -33,20 +52,35 @@ pipeline {
         }
         stage('Model testing') {
             steps {
-                sh 'python ./scripts/model_testing.py'
+                sh 'python -m pytest ./tests/test_model.py'
             }
         }
-        stage('Model unit tests') {
+        stage('Docker build') {
             steps {
-                sh 'python -m pytest ./tests/test_model.py'
+                sh 'sudo docker build -t denking/text_tonality_classifier:1.0 .'
+            }
+        }
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                        sh 'docker logout'
+                        sh "docker login -u '${DOCKERHUB_USERNAME}' -p '${DOCKERHUB_PASSWORD}' docker.io"
+                        sh 'docker push denking/text_tonality_classifier:1.0'
+                        sh 'docker logout'
+                    }
+                }
+            }
+        }
+        stage('Docker run') {
+            steps {
+                sh 'sudo docker run -d -p 7860:7860 denking/text_tonality_classifier:1.0'
+                sh 'sleep 10s'
             }
         }
         stage('Webui test') {
             steps {
-                sh 'python app.py &'
-                sh 'sleep 10s'
                 sh 'python -m pytest ./tests/test_webui.py'
-                sh 'pkill -f app.py'
             }
         }
     }

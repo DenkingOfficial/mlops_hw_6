@@ -1,7 +1,7 @@
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import pandas as pd
 import pickle
 
@@ -21,7 +21,13 @@ def model_train(train_data, target_data):
     TF_IDF_SVC_NEW = SVC(C=3, gamma=0.2, random_state=665).fit(X_train, y_train)
     print("Model trained")
     y_pred = TF_IDF_SVC_NEW.predict(X_val)
-    print("Accuracy on validation set:", accuracy_score(y_val, y_pred))
+    print("Metrics on validation set:")
+    print(
+        f"\tAccuracy: {accuracy_score(y_val, y_pred)}\n",
+        f"\tPrecision: {precision_score(y_val, y_pred, pos_label='positive')}\n",
+        f"\tRecall: {recall_score(y_val, y_pred, pos_label='positive')}\n",
+        f"\tF1-score: {f1_score(y_val, y_pred, pos_label='positive')}\n",
+    )
     return TF_IDF_SVC_NEW
 
 
