@@ -12,13 +12,22 @@ Team #2
 2. Тесты на качество данных, на качество работы модели на тестовых данных и на работоспособность модели в веб-приложении.
 3. Пайплайн в Jenkins (Jenkinsfile)
 
-![pipeline](https://raw.github.com/DenkingOfficial/mlops_hw_6/main/static/pipeline-screenshot.jpg)
+![Pipeline](https://raw.github.com/DenkingOfficial/mlops_hw_6/main/static/pipeline-screenshot.jpg)
 
 4. Версионирование данных с помощью DVC
-5. Сборка Docker образа в пайплайне
-6. Загрузка Docker образа на Dockerhub в пайплайне
+Для удобства были сделаны 2 тега в репозитории:
+* В ветке main - датасет [Тональность отзывов об обслуживании](https://www.kaggle.com/competitions/tonality-reviews/data)
+* Под тегом dataset_v2 - датасет [Russian-language reviews](https://www.kaggle.com/datasets/laytsw/reviews)
+* Под тегом dataset_merged - два объединенных датасета
+Во время работы пайплайна в Jenkins первым шагом он ожидает пока пользователь выберет версию датасета, которую дальше использовать:
+![Dataset selection]
 
-![pipeline](https://raw.github.com/DenkingOfficial/mlops_hw_6/main/static/Dockerhub-screenshot.jpg)
+![Dataset selection](https://raw.github.com/DenkingOfficial/mlops_hw_6/main/static/dataset-selection-screenshot.jpg)
+
+5. Сборка Docker образа в пайплайне
+6. Загрузка Docker образа на [Dockerhub](https://hub.docker.com/repository/docker/denking/text_tonality_classifier/general) в пайплайне
+
+![Dockerhub](https://raw.github.com/DenkingOfficial/mlops_hw_6/main/static/Dockerhub-screenshot.jpg)
 
 Использованы наборы данных:
 * [Russian-language reviews](https://www.kaggle.com/datasets/laytsw/reviews)
