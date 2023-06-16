@@ -1,9 +1,23 @@
 pipeline {
     agent any
     stages {
+        stage('Select Version') {
+            steps {
+                script {
+                    def versionChoices = ['*/main', 'refs/tags/dataset_v2', 'refs/tags/dataset_merged']
+                    selectedVersion = input message: 'Choose a dataset version:',
+                                       parameters: [choice(name: 'version', choices: versionChoices.join('\n'), description: 'Select a version from the list')]
+                    echo "Selected dataset version: ${selectedVersion}"
+                }
+            }
+        }
         stage('Clone Repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/DenkingOfficial/mlops_hw_6.git'
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: selectedVersion]],
+                    userRemoteConfigs: [[url: 'https://github.com/DenkingOfficial/mlops_hw_6.git']]
+                ])
             }
         }
         stage('Install requirements') {
@@ -33,20 +47,7 @@ pipeline {
         }
         stage('Model testing') {
             steps {
-                sh 'python ./scripts/model_testing.py'
-            }
-        }
-        stage('Model unit tests') {
-            steps {
                 sh 'python -m pytest ./tests/test_model.py'
-            }
-        }
-        stage('Webui test') {
-            steps {
-                sh 'python app.py &'
-                sh 'sleep 10s'
-                sh 'python -m pytest ./tests/test_webui.py'
-                sh 'pkill -f app.py'
             }
         }
         stage('Docker build') {
@@ -57,6 +58,12 @@ pipeline {
         stage('Docker run') {
             steps {
                 sh 'sudo docker run -d -p 7860:7860 hw6:1.0'
+                sh 'sleep 10s'
+            }
+        }
+        stage('Webui test') {
+            steps {
+                sh 'python -m pytest ./tests/test_webui.py'
             }
         }
     }

@@ -21,3 +21,13 @@ def test_null_check():
 def test_duplicate_check():
     assert df_train.duplicated().sum() == 0
     assert df_test.duplicated().sum() == 0
+
+
+def test_train_class_balance():
+    positives = sum(df_train["sentiment"] == "positive")
+    negatives = sum(df_train["sentiment"] == "negative")
+    total_samples = len(df_train)
+    positives_ratio = positives / total_samples
+    negatives_ratio = negatives / total_samples
+    tolerance = 0.05
+    assert abs(positives_ratio - negatives_ratio) <= tolerance
