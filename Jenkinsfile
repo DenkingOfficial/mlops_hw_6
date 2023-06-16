@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    
+    environment {
+        DOCKERHUB_USERNAME = credentials('dockerhub-credentials')
+    }
+    
     stages {
         stage('Select Version') {
             steps {
@@ -52,12 +57,24 @@ pipeline {
         }
         stage('Docker build') {
             steps {
-                sh 'sudo docker build -t hw6:1.0 .'
+                sh 'sudo docker build -t denking/text_tonality_classifier:1.0 .'
+            }
+        }
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                        sh 'docker logout'
+                        sh "docker login -u '${DOCKERHUB_USERNAME}' -p '${DOCKERHUB_PASSWORD}' docker.io"
+                        sh 'docker push denking/text_tonality_classifier:1.0'
+                        sh 'docker logout'
+                    }
+                }
             }
         }
         stage('Docker run') {
             steps {
-                sh 'sudo docker run -d -p 7860:7860 hw6:1.0'
+                sh 'sudo docker run -d -p 7860:7860 denking/text_tonality_classifier:1.0'
                 sh 'sleep 10s'
             }
         }
