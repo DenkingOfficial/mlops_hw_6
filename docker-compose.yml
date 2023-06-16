@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  app:
+    image: text_tonality_classifier
+    build: http://github.com/DenkingOfficial/mlops_hw_6.git#main
+    ports:
+      - "7860:7860"
