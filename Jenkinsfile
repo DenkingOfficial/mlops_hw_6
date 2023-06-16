@@ -1,9 +1,23 @@
 pipeline {
     agent any
     stages {
+        stage('Select Version') {
+            steps {
+                script {
+                    def versionChoices = ['*/main', 'refs/tags/dataset_v2', 'refs/tags/dataset_merged']
+                    selectedVersion = input message: 'Choose a dataset version:',
+                                       parameters: [choice(name: 'version', choices: versionChoices.join('\n'), description: 'Select a version from the list')]
+                    echo "Selected dataset version: ${selectedVersion}"
+                }
+            }
+        }
         stage('Clone Repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/DenkingOfficial/mlops_hw_6.git'
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: ${selectedVersion}]],
+                    userRemoteConfigs: [[url: 'https://github.com/DenkingOfficial/mlops_hw_6.git']]
+                ])
             }
         }
         stage('Install requirements') {
